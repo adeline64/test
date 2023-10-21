@@ -1,0 +1,92 @@
+<script setup>
+import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
+import { SearchOutlined } from '@ant-design/icons-vue'
+const searchText = ref('')
+
+const handleSubmit = e => {
+  e.preventDefault()
+  console.log(e);
+  console.log(searchText.value);
+}
+</script>
+
+<template>
+<nav class="navbar navbar-expand-md navbar-light fixed-top bg-white border-bottom border-dark border-2">
+    <div class="container-fluid mx-5">
+        <RouterLink to="/" class="navbar-brand"></RouterLink>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                  <RouterLink to="/" class="nav-link active" aria-current="page">Home</Routerlink>
+                </li>
+                <li class="nav-item">
+                    <RouterLink to="/cart" class="nav-link">Cart</RouterLink>
+                </li>
+
+            </ul>
+            <form class="d-flex mb-0" action="{{ path('search') }}">
+
+                <div class="input-group">
+                    <div class="form-outline">
+                        <input id="search" list="searchList" name="search" class="form-control" type="search"
+                               placeholder="Search" aria-label="Search">
+                    </div>
+                    <button type="submit" class="btn btn-dark">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                             stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="" role="img"
+                             viewbox="0 0 24 24" focusable="false">
+                            <title>Search</title>
+                            <circle cx="10.5" cy="10.5" r="7.5"></circle>
+                            <path d="M21 21l-5.2-5.2"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <datalist id="searchList"></datalist>
+            </form>
+
+
+        </div>
+
+        <div class="col-4 d-flex justify-content-end align-items-center">
+
+
+            <RouterLink to="/cart" class="text-muted">
+                <svg focusable="false" xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
+                     class="bi bi-cart" viewbox="0 0 16 16">
+                    <path stroke="black"
+                          d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+
+            </RouterLink>
+            <RouterLink to="/cart" class="btn " id="cartQuantity">Cart   
+            </RouterLink>
+
+
+        </div>
+        <div class="mx-5 d-flex justify-content-end align-items-center ">
+
+                   
+
+                <RouterLink v-if="True" to="/logout">
+                    <button type="button" class="btn btn-primary me-2">Deconnexion</button>
+                </RouterLink>            
+                <RouterLink v-else to="/login">
+                    <button type="button" class="btn btn-primary me-2">Connexion</button>
+                </RouterLink>
+                <RouterLink to="/register">
+                    <button type="button" class="btn btn-warning">
+                        Inscription
+                    </button>
+                </RouterLink>
+            
+        </div>
+
+    </div>
+</nav>
+</template>
