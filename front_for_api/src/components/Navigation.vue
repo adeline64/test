@@ -1,8 +1,27 @@
-<script setup>
+<script>
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import { SearchOutlined } from '@ant-design/icons-vue'
+
 const searchText = ref('')
+
+// const isAuthenticated = ref(false);
+
+export default {
+    data: function() {
+        return {
+            mode: 'logout',
+        }
+    },
+    methods: {
+        switchToLogout: function() {
+            this.mode = 'logout';
+        },
+        switchToLogin: function() {
+            this.mode = 'login';
+        }
+    }
+}
 
 const handleSubmit = e => {
   e.preventDefault()
@@ -72,13 +91,12 @@ const handleSubmit = e => {
         <div class="mx-5 d-flex justify-content-end align-items-center ">
 
                    
-
-                <RouterLink v-if="True" to="/logout">
-                    <button type="button" class="btn btn-primary me-2">Deconnexion</button>
-                </RouterLink>            
-                <RouterLink v-else to="/login">
-                    <button type="button" class="btn btn-primary me-2">Connexion</button>
-                </RouterLink>
+            <RouterLink v-if="mode === 'login'" to="/logout">
+                <button @click="switchToLogin" type="button" class="btn btn-primary me-2">Déconnexion</button>
+            </RouterLink>
+            <RouterLink v-else to="/login">
+                <button @click="switchToLogout" type="button" class="btn btn-primary me-2">Connexion</button>
+            </RouterLink>
                 <RouterLink to="/register">
                     <button type="button" class="btn btn-warning">
                         Inscription

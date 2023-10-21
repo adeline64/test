@@ -4,6 +4,9 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+
+const isAuthenticated = ref(false);
+
 const form = ref({
     email: '',
     password: ''
@@ -19,6 +22,11 @@ const handleLogin = async () => {
             password:form.value.password,
         });
         console.log('Login successful!');
+        console.log("email ", form.value.email);
+        console.log("password ", form.value.password);
+        console.log("isAuthenticated ", isAuthenticated);
+        isAuthenticated.value = true;        
+        console.log("isAuthenticated ", isAuthenticated);
         router.push("/");
     } catch (error) {
         console.error('Login failed:', error);
