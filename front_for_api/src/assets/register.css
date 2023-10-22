@@ -1,0 +1,40 @@
+/* Styles for the registration form */
+h2 {
+    text-align: center;
+  }
+  
+.form-container {
+    max-width: 300px;
+    margin: 0 auto;
+    margin-top: 13rem; /* Ajustez cette valeur en utilisant rem pour déplacer le formulaire vers le bas */
+  }
+  
+  label {
+    display: block;
+    margin-top: 1rem;
+  }
+  
+  input {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.4rem;
+  }
+  
+  button {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 0.4rem;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Add more styles and media queries as needed */
+  
