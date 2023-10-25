@@ -9,49 +9,48 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/api')]
 class CartController extends AbstractController
 {
     #[Route('/cart', name: 'cart')]
-    public function index(Cart $cartSession, ProductRepository $productRepo, SessionInterface $session): Response
+    public function index(Cart $cartSession, ProductRepository $productRepo): JsonResponse
     {
         $cart = [];
         foreach ($cartSession->getCart() as $id => $quantity) {
-            if($quantity>0){
-                $cart[] =  ($productRepo->find($id))->setQuantity($quantity);
+            if ($quantity > 0) {
+                $product = $productRepo->find($id);
+                if ($product) {
+                    $cart[] = [
+                        'id' => $product->getId(),
+                        'name' => $product->getName(),
+                        'quantity' => $quantity,
+                    ];
+                }
             }
         }
-        return $this->render('cart/index.html.twig', [
-            'cart' => $cart,
-        ]);
+        return new JsonResponse($cart);
     }
 
     #[Route('/addCart/{id}', name: 'addCart')]
-    public function addCart(Cart $cart, Request $request, SessionInterface $session, Product $product): Response
+    public function addCart(Cart $cart, Request $request, Product $product): JsonResponse
     {
-        $quantity=$request->get("quantity");
+        $quantity = $request->get("quantity");
         $cart->update($product, $quantity);
-        $previousUrl = $request->headers->get("referer");
-        return $this->redirect($previousUrl);
+
+        return new JsonResponse(['message' => 'Item added to the cart']);
     }
 
     #[Route('/cartsize', name: 'cartsize')]
-    public function getCartSize(SessionInterface $session): Response
+    public function getCartSize(Cart $cart): JsonResponse
     {
-        $totalQuantity = 0;
-        foreach ($session->get("cart", []) as $id => $quantity) {
-            if($quantity>0){
-                $totalQuantity+=$quantity;
-          }
-        }
-        return new Response($totalQuantity);
+        $totalQuantity = $cart->getTotalQuantity();
+
+        return new JsonResponse(['cart_size' => $totalQuantity]);
     }
-
-  
-   
-
   
 }
 
