@@ -30,6 +30,14 @@ class LoginController extends AbstractController
             }
         }
     }
+
+    #[Route('/logout', name: 'logout', methods: ['POST'])]
+    public function apiLogout() {
+
+        return new JsonResponse(['message' => 'User logged out'], 200);
+
+    }
+
 }
     //#[Route('/logout', name: 'logout')]
     //public function logout(){}
