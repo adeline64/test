@@ -1,14 +1,51 @@
-<script setup>
-import { ref } from 'vue';
+<script>
+import { ref, computed } from 'vue';
 import { RouterLink } from 'vue-router';
 import { SearchOutlined } from '@ant-design/icons-vue'
+import Axios from 'axios';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+
 const searchText = ref('')
 
-const handleSubmit = e => {
-  e.preventDefault()
-  console.log(e);
-  console.log(searchText.value);
-}
+// const isAuthenticated = ref(false);
+
+export default {
+  setup() {
+    const store = useStore();
+    const searchText = ref('');
+
+    const router = useRouter();
+
+    const isLoggedIn = computed(() => store.getters.isLoggedIn);
+
+    const switchMode = () => {
+        if (isLoggedIn.value) {
+
+            Axios.post('http://localhost:8000/api/logout')
+            .then(response => {
+                console.log(response.data.message);
+                store.dispatch('logout');
+                router.push('/');
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        } else {
+        router.push('/login');
+        
+      }
+    };
+
+    const handleSearch = () => {
+      // Gérer la recherche ici
+      console.log('Search Text:', searchText.value);
+    };
+
+    return { isLoggedIn, searchText, switchMode, handleSearch };
+  }
+};
 </script>
 
 <template>
@@ -73,12 +110,12 @@ const handleSubmit = e => {
 
                    
 
-                <RouterLink v-if="True" to="/logout">
-                    <button type="button" class="btn btn-primary me-2">Deconnexion</button>
-                </RouterLink>            
-                <RouterLink v-else to="/login">
-                    <button type="button" class="btn btn-primary me-2">Connexion</button>
-                </RouterLink>
+            <RouterLink v-if="isLoggedIn" to="/">
+            <button @click="switchMode" type="button" class="btn btn-primary me-2">Déconnexion</button>
+            </RouterLink>
+            <RouterLink v-else to="/login">
+            <button @click="switchMode" type="button" class="btn btn-primary me-2">Connexion</button>
+            </RouterLink>
                 <RouterLink to="/register">
                     <button type="button" class="btn btn-warning">
                         Inscription
