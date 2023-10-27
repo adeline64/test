@@ -53,9 +53,3 @@ class CartController extends AbstractController
     }
   
 }
-
-
-
-
-
-
