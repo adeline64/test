@@ -10,21 +10,24 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+#[Route('/api')]
 class HomeController extends AbstractController
 {
 
-    #[Route('/', name: 'home')]
-    public function index(Request $request, CategoryRepository $categoryRepo, SessionInterface $session, ProductRepository $productRepository): Response
+    #[Route('/', name: 'home', methods: ['GET'])]
+    public function index(Request $request, CategoryRepository $categoryRepo, SessionInterface $session, ProductRepository $productRepository): JsonResponse
     {
 
         $filter = $request->get("filter");
         $minRange = $productRepository->findOneBy([], ['price' => 'asc'])->getPrice();
         $maxRange = $productRepository->findOneBy([], ['price' => 'desc'])->getPrice();
+
         if ($request->get("minPrice")) {
             $minChoice = $request->get("minPrice") * 100;
         } else {
             $minChoice = $minRange;
         }
+
         if ($request->get("maxPrice")) {
             $maxChoice = $request->get("maxPrice") * 100;
         } else {
@@ -35,13 +38,16 @@ class HomeController extends AbstractController
         $categoriesChoice = $request->get("category", []);
         $products = $productRepository->findAllByFilters($filter, $minChoice, $maxChoice, $categoriesChoice);
 
-        return $this->render('home/index.html.twig', [
+        // Prepare the data you want to return
+        $responseData = [
             "products" => $products,
             "categories" => $categories,
             "minRange" => $minRange,
             "maxRange" => $maxRange,
             "minChoice" => $minChoice,
-            "maxChoice" => $maxChoice
-        ]);
+            "maxChoice" => $maxChoice,
+        ];
+
+        return $this->json($responseData);
     }
 }
